@@ -16,11 +16,18 @@ model User {
     createdAt DateTime @default(now())
 }
 
-model Plan {
+/* model Plan {
     id Int @id @default(autoincrement())
     name String
     description String?
     price Float
     interval String
+    createdAt DateTime @default(now())
+} */
+
+model Service {
+    id Int @id @default(autoincrement())
+    name String
+    description String?
     createdAt DateTime @default(now())
 }

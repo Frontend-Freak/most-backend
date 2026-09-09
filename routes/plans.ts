@@ -1,4 +1,4 @@
-/* import { Router, type Request, type Response } from "express";
+import { Router, type Request, type Response } from "express";
 import prisma from "../prisma.js";
 
 const router = Router();
@@ -22,9 +22,12 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-    const plan = await prisma.plan.create({ data: req.body });
-
-    res.status(201).json(plan);
+    try {
+        const plan = await prisma.plan.create({ data: req.body });
+        res.status(201).json(plan);
+    } catch (error) {
+        res.status(404).json({message: "Сервис не найден"})
+    }
 });
 
 router.patch("/:id", async (req: Request, res: Response) => {
@@ -35,7 +38,7 @@ router.patch("/:id", async (req: Request, res: Response) => {
         });
         res.status(200).json(plan);
     } catch (error) {
-        res.status(404).json({ message: "План не найден" });
+        res.status(404).json({ message: "Ошибка при обновлении" });
     }
 });
 
@@ -51,4 +54,3 @@ router.delete("/:id", async (req: Request, res: Response) => {
 });
 
 export default router;
- */

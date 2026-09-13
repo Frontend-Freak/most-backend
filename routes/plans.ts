@@ -4,7 +4,11 @@ import prisma from "../prisma.js";
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-    const plans = await prisma.plan.findMany();
+    const { serviceId } = req.query;
+
+    const plans = await prisma.plan.findMany({
+        where: serviceId ? { serviceId: Number(serviceId) } : {},
+    });
 
     res.status(200).json(plans);
 });
@@ -26,7 +30,7 @@ router.post("/", async (req: Request, res: Response) => {
         const plan = await prisma.plan.create({ data: req.body });
         res.status(201).json(plan);
     } catch (error) {
-        res.status(404).json({message: "Сервис не найден"})
+        res.status(404).json({ message: "Сервис не найден" });
     }
 });
 

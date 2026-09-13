@@ -3,6 +3,7 @@ import cors from "cors";
 import { PORT } from "./constants.js";
 import plansRouter from "./routes/plans.js";
 import servicesRouter from "./routes/services.js";
+import authRouter from "./routes/auth.js";
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/plans", plansRouter);
 
 app.use("/services", servicesRouter);
+
+app.use("/auth", authRouter);
 
 app.listen(PORT, () => {
     console.log(`Сервер работает на ${PORT} порту`);

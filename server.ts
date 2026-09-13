@@ -4,6 +4,7 @@ import { PORT } from "./constants.js";
 import plansRouter from "./routes/plans.js";
 import servicesRouter from "./routes/services.js";
 import authRouter from "./routes/auth.js";
+import "dotenv/config";
 
 const app = express();
 

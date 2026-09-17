@@ -1,5 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import prisma from "../prisma.js";
+import adminMiddleware from "../middleware/admin.js";
+import authMiddleware from "../middleware/auth.js";
 
 const router = Router();
 
@@ -25,36 +27,51 @@ router.get("/:id", async (req: Request, res: Response) => {
     res.status(200).json(plan);
 });
 
-router.post("/", async (req: Request, res: Response) => {
-    try {
-        const plan = await prisma.plan.create({ data: req.body });
-        res.status(201).json(plan);
-    } catch (error) {
-        res.status(404).json({ message: "Сервис не найден" });
-    }
-});
+router.post(
+    "/",
+    authMiddleware,
+    adminMiddleware,
+    async (req: Request, res: Response) => {
+        try {
+            const plan = await prisma.plan.create({ data: req.body });
+            res.status(201).json(plan);
+        } catch (error) {
+            res.status(404).json({ message: "Сервис не найден" });
+        }
+    },
+);
 
-router.patch("/:id", async (req: Request, res: Response) => {
-    try {
-        const plan = await prisma.plan.update({
-            where: { id: Number(req.params.id) },
-            data: req.body,
-        });
-        res.status(200).json(plan);
-    } catch (error) {
-        res.status(404).json({ message: "Ошибка при обновлении" });
-    }
-});
+router.patch(
+    "/:id",
+    authMiddleware,
+    adminMiddleware,
+    async (req: Request, res: Response) => {
+        try {
+            const plan = await prisma.plan.update({
+                where: { id: Number(req.params.id) },
+                data: req.body,
+            });
+            res.status(200).json(plan);
+        } catch (error) {
+            res.status(404).json({ message: "Ошибка при обновлении" });
+        }
+    },
+);
 
-router.delete("/:id", async (req: Request, res: Response) => {
-    try {
-        await prisma.plan.delete({
-            where: { id: Number(req.params.id) },
-        });
-        res.status(204).send();
-    } catch (error) {
-        res.status(404).json({ message: "План не найден" });
-    }
-});
+router.delete(
+    "/:id",
+    authMiddleware,
+    adminMiddleware,
+    async (req: Request, res: Response) => {
+        try {
+            await prisma.plan.delete({
+                where: { id: Number(req.params.id) },
+            });
+            res.status(204).send();
+        } catch (error) {
+            res.status(404).json({ message: "План не найден" });
+        }
+    },
+);
 
 export default router;
